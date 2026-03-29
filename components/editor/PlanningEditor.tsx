@@ -26,7 +26,8 @@ import {
   hitTestCamera,
   hitTestRotateHandle,
 } from './canvasRenderer';
-import { addressToFilename } from '@/utils/helpers';
+import { addressToFilename, clamp } from '@/utils/helpers';
+import { MAX_FOV_ANGLE, MIN_FOV_ANGLE } from '@/lib/constants';
 import type { Lang } from '@/hooks/useLanguage';
 import { t as translations } from '@/lib/translations';
 import ProductRecommendations from './ProductRecommendations';
@@ -344,7 +345,7 @@ export default function PlanningEditor({ property, onReset, debugInfo, lang = 'e
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col">
+    <div className="w-full max-w-6xl mx-auto flex flex-col px-1 sm:px-0">
 
       {/* Top bar */}
       <div className="flex items-start justify-between gap-4 mb-4">
@@ -403,9 +404,9 @@ export default function PlanningEditor({ property, onReset, debugInfo, lang = 'e
       </div>
 
       {/* Canvas + Inspector + Recommendations */}
-      <div className="flex gap-3 items-start">
+      <div className="flex flex-col lg:flex-row gap-3">
 
-        {/* Canvas column */}
+        {/* Canvas column - full width on mobile */}
         <div className="flex-1 min-w-0">
           <div className="relative rounded-xl overflow-hidden bg-black border border-white/8 shadow-2xl shadow-black/60">
             <canvas
@@ -443,14 +444,25 @@ export default function PlanningEditor({ property, onReset, debugInfo, lang = 'e
             )}
           </div>
 
-          {/* Keyboard hint */}
-          <p className="mt-2 px-0.5 text-[10px] text-gray-700">
+          {/* Keyboard hint - hidden on mobile */}
+          <p className="hidden sm:block mt-2 px-0.5 text-[10px] text-gray-700">
             {tr.hint}
           </p>
+
+          {/* Inspector panel - horizontal below canvas on mobile */}
+          {selectedCamera && (
+            <div className="lg:hidden mt-3">
+              <MobileInspector
+                camera={selectedCamera}
+                onUpdate={patch => editor.updateCamera(selectedCamera.id, patch)}
+                onDelete={() => editor.deleteCamera(selectedCamera.id)}
+              />
+            </div>
+          )}
         </div>
 
-        {/* Inspector panel — always reserve column to prevent canvas resize */}
-        <div className="w-48 shrink-0">
+        {/* Inspector panel - sidebar on desktop */}
+        <div className="hidden lg:block w-48 shrink-0">
           {selectedCamera && (
             <CameraInspector
               camera={selectedCamera}
@@ -460,14 +472,89 @@ export default function PlanningEditor({ property, onReset, debugInfo, lang = 'e
           )}
         </div>
 
-        {/* Product recommendations */}
-        <div className="hidden lg:block">
+        {/* Product recommendations - desktop only */}
+        <div className="hidden xl:block">
           <ProductRecommendations tr={translations[lang].recommendations} />
         </div>
       </div>
 
       {/* Temporary dev panel — remove once values are confirmed */}
       {/* DevPanel solo disponible en desarrollo local */}
+    </div>
+  );
+}
+
+// ─── Mobile Inspector (horizontal layout) ────────────────────────────────────
+
+function MobileInspector({
+  camera,
+  onUpdate,
+  onDelete,
+}: {
+  camera: PlacedCamera;
+  onUpdate: (patch: Partial<PlacedCamera>) => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-[#080c14] p-3">
+      {/* Header row */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-[#1a6bff]/12 border border-[#1a6bff]/25 flex items-center justify-center">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1a6bff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <span className="text-xs font-semibold text-white">{camera.label}</span>
+        </div>
+        <button
+          onClick={onDelete}
+          className="text-[10px] font-semibold px-2.5 py-1 rounded-lg border border-red-500/25 text-red-500/70"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Controls grid - 3 columns horizontal */}
+      <div className="grid grid-cols-3 gap-3">
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[9px] text-gray-600 uppercase">Rotación</span>
+            <span className="text-[9px] text-gray-400 font-mono">{Math.round(camera.rotation)}°</span>
+          </div>
+          <input
+            type="range" min={0} max={359}
+            value={Math.round(camera.rotation)}
+            onChange={e => onUpdate({ rotation: Number(e.target.value) })}
+            className="w-full h-1 accent-[#1a6bff]"
+          />
+        </div>
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[9px] text-gray-600 uppercase">Ángulo</span>
+            <span className="text-[9px] text-gray-400 font-mono">{camera.fovAngle}°</span>
+          </div>
+          <input
+            type="range" min={MIN_FOV_ANGLE} max={MAX_FOV_ANGLE}
+            value={camera.fovAngle}
+            onChange={e => onUpdate({ fovAngle: clamp(Number(e.target.value), MIN_FOV_ANGLE, MAX_FOV_ANGLE) })}
+            className="w-full h-1 accent-[#1a6bff]"
+          />
+        </div>
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[9px] text-gray-600 uppercase">Alcance</span>
+            <span className="text-[9px] text-gray-400 font-mono">{camera.fovLength}px</span>
+          </div>
+          <input
+            type="range" min={30} max={300}
+            value={camera.fovLength}
+            onChange={e => onUpdate({ fovLength: clamp(Number(e.target.value), 30, 300) })}
+            className="w-full h-1 accent-[#1a6bff]"
+          />
+        </div>
+      </div>
     </div>
   );
 }

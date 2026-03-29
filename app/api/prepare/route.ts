@@ -23,7 +23,7 @@ function log(...args: unknown[]) {
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  const { success } = rateLimit(ip, { limit: 5, windowMs: 60_000 });
+  const { success } = rateLimit(ip, { limit: 30, windowMs: 60_000 });
   if (!success) {
     return NextResponse.json<ApiError>({ error: 'Too many requests. Try again in a minute.' }, { status: 429 });
   }

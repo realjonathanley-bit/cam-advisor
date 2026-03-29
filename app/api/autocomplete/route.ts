@@ -20,7 +20,7 @@ interface Prediction {
 
 export async function GET(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  const { success } = rateLimit(ip, { limit: 30, windowMs: 60_000 });
+  const { success } = rateLimit(ip, { limit: 60, windowMs: 60_000 });
   if (!success) {
     return NextResponse.json({ predictions: [] as Prediction[] });
   }
