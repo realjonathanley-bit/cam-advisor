@@ -467,7 +467,7 @@ export default function PlanningEditor({ property, onReset, debugInfo, lang = 'e
       </div>
 
       {/* Temporary dev panel — remove once values are confirmed */}
-      {debugInfo && <DevPanel debugInfo={debugInfo} />}
+      {process.env.NODE_ENV === 'development' && debugInfo && <DevPanel debugInfo={debugInfo} />}
     </div>
   );
 }

@@ -2,11 +2,13 @@
 
 import type { RecommendationsTranslations } from '@/lib/translations';
 
+const TVIGILO = 'https://tvigilo.com';
+
 const PRODUCTS = [
-  { slug: 'indoor-pro', image: '/products/indoor-pro.png', price: 300 },
-  { slug: 'outdoor-pro', image: '/products/outdoor-pro.png', price: 350 },
-  { slug: 'doorbell', image: '/products/doorbell.png', price: 350 },
-  { slug: 'kit-inicial', image: '/products/kit-home.png', price: null },
+  { slug: 'indoor-pro', image: `${TVIGILO}/products/indoor-pro.png`, price: 300 },
+  { slug: 'outdoor-pro', image: `${TVIGILO}/products/outdoor-pro.png`, price: 350 },
+  { slug: 'doorbell', image: `${TVIGILO}/products/doorbell.png`, price: 350 },
+  { slug: 'kit-inicial', image: `${TVIGILO}/products/kit-home.png`, price: null },
 ] as const;
 
 interface Props {
