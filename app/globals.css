@@ -1,26 +1,47 @@
 @import "tailwindcss";
 
+/* ─── Brand tokens (matching TVIGILO design language) ─────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --blue: #1a6bff;
+  --blue-dark: #0050e6;
+  --black: #000000;
+  --surface: #0d0d0d;
+  --surface-light: #1a1a1a;
+  --border: rgba(255, 255, 255, 0.1);
+  --text-muted: #8a8a8a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ─── Base ────────────────────────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--black);
+  color: #ffffff;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Utility ─────────────────────────────────────────────────────────────── */
+.btn-blue {
+  background-color: var(--blue);
+  transition: background-color 0.2s ease;
+}
+
+.btn-blue:hover {
+  background-color: var(--blue-dark);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Smooth canvas cursor when dragging cameras */
+.canvas-dragging {
+  cursor: grabbing !important;
 }

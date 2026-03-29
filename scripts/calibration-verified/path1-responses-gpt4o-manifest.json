@@ -1,0 +1,7 @@
+{
+  "id": "path1-responses-gpt4o",
+  "apiPath": "responses.create(gpt-4o) — FAILED",
+  "prompt": "Transform this satellite image into a faithful top-down exterior property diagram.\n\nCritical requirements:\n- preserve the real exterior layout of the property\n- preserve the real house footprint and orientation\n- preserve the driveway location and shape\n- preserve the visible lot boundaries as much as possible\n- preserve the relationship between house, driveway, yard, and surrounding edges\n\nVisual style:\n- black background\n- thin white clean lines\n- minimal premium security-planning style\n- simplified exterior geometry\n- top-down site-plan aesthetic\n- no textures, grass detail, shadows, or photo noise\n\nDo NOT:\n- create an interior floor plan\n- invent rooms, doors, or interior walls\n- redesign the building\n- change the footprint\n- add artistic architectural flourishes\n- create a generic house drawing unrelated to the image\n\nThe output must look like a simplified exterior site plan derived from the real property, not a fictional blueprint.\n\nNegative constraints:\n- no interior floor plan\n- no room layout\n- no door swing symbols\n- no indoor walls\n- no fictional architecture\n- no perspective view\n- no sketchbook style\n- no hand-drawn style\n- no extra buildings\n- no layout changes",
+  "elapsed": "0.9s",
+  "timestamp": "2026-03-27T14:43:22.579Z"
+}
