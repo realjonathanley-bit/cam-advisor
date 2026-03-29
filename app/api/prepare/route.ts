@@ -76,12 +76,6 @@ export async function POST(req: NextRequest) {
         imageHeight: transformed.height,
         transformProvider: transformed.provider,
       },
-      debug: {
-        zoom,
-        cropFactor,
-        transformProvider: transformed.provider,
-        autocompleteEnabled,
-      },
     };
 
     return NextResponse.json<PrepareResponse>(result);
