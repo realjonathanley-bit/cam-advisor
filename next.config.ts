@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  basePath: '/cam-advisor',
+  basePath: '/tvigiloadvisor',
   env: {
     NEXT_PUBLIC_SATELLITE_ZOOM: process.env.SATELLITE_ZOOM ?? '20',
   },
