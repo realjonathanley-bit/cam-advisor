@@ -128,7 +128,7 @@ export default function Home() {
 
             <a
               href="/"
-              onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}
+              onClick={(e) => { e.preventDefault(); window.location.href = 'https://tvigilo.com'; }}
               className="text-sm text-gray-400 hover:text-white transition-colors"
             >
               {tr.header.back}

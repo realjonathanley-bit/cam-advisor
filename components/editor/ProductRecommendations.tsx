@@ -29,7 +29,7 @@ export default function ProductRecommendations({ tr }: Props) {
           <a
             key={slug}
             href={`/productos/${slug}`}
-            onClick={(e) => { e.preventDefault(); window.location.href = `/productos/${slug}`; }}
+            onClick={(e) => { e.preventDefault(); window.location.href = `https://tvigilo.com/productos/${slug}`; }}
             className="group flex gap-2.5 p-2.5 rounded-xl border border-white/8 bg-white/[0.02] hover:border-[#1a6bff]/30 hover:bg-[#1a6bff]/[0.04] transition-all cursor-pointer"
           >
             <div className="w-12 h-12 rounded-lg bg-black flex-shrink-0 flex items-center justify-center overflow-hidden">
