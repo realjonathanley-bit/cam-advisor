@@ -45,9 +45,9 @@ export function drawFOVCone(ctx: CanvasRenderingContext2D, cam: PlacedCamera): v
   ctx.save();
 
   const grad = ctx.createRadialGradient(cam.x, cam.y, 0, cam.x, cam.y, cam.fovLength);
-  grad.addColorStop(0,    'rgba(26,107,255,0.20)');
-  grad.addColorStop(0.55, 'rgba(26,107,255,0.09)');
-  grad.addColorStop(1,    'rgba(26,107,255,0.015)');
+  grad.addColorStop(0,    'rgba(26,107,255,0.45)');
+  grad.addColorStop(0.55, 'rgba(26,107,255,0.25)');
+  grad.addColorStop(1,    'rgba(26,107,255,0.08)');
 
   ctx.beginPath();
   ctx.moveTo(cam.x, cam.y);
@@ -57,7 +57,7 @@ export function drawFOVCone(ctx: CanvasRenderingContext2D, cam: PlacedCamera): v
   ctx.fill();
 
   // Edge lines
-  ctx.strokeStyle = 'rgba(26,107,255,0.42)';
+  ctx.strokeStyle = 'rgba(26,107,255,0.65)';
   ctx.lineWidth   = 0.75;
   ctx.beginPath();
   ctx.moveTo(cam.x, cam.y);
