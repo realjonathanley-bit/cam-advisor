@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, DragEvent } from 'react';
+import { useRef, useState, useEffect, DragEvent } from 'react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import type { PreparedPropertyData } from '@/types';
@@ -23,11 +23,16 @@ export default function PhotoUpload({ onSubmit, lang = 'es' }: PhotoUploadProps)
   const [busy, setBusy] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
   function pickFile(f: File | undefined) {
     if (!f) return;
     setError(null);
     setFile(f);
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPreviewUrl(URL.createObjectURL(f));
   }
 
@@ -55,6 +60,7 @@ export default function PhotoUpload({ onSubmit, lang = 'es' }: PhotoUploadProps)
       onSubmit(property);
     } catch (err) {
       setError(errorMessage(err));
+    } finally {
       setBusy(false);
     }
   }
