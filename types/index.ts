@@ -160,7 +160,8 @@ export interface PlacedCamera {
 export interface PreparedPropertyData {
   address: string;
   formattedAddress?: string;
-  coordinates: Coordinates;
+  /** Present for address-sourced properties; absent for uploaded photos */
+  coordinates?: Coordinates;
   /** Raw satellite image as base64 data URL */
   originalImageDataUrl: string;
   /** Stylized security-plan background as base64 data URL */
