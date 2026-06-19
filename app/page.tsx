@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { AppStep, PreparedPropertyData, PrepareDebugInfo } from '@/types';
 import StepIndicator from '@/components/StepIndicator';
 import AddressInput from '@/components/AddressInput';
+import PhotoUpload from '@/components/PhotoUpload';
 import LoadingState from '@/components/LoadingState';
 import ErrorState from '@/components/ErrorState';
 import PlanningEditor from '@/components/editor/PlanningEditor';
@@ -17,6 +18,7 @@ export default function Home() {
   const tr = translations[lang];
 
   const [step, setStep] = useState<AppStep>('input');
+  const [inputMode, setInputMode] = useState<'address' | 'upload'>('address');
   const [address, setAddress] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [property, setProperty] = useState<PreparedPropertyData | null>(null);
@@ -73,6 +75,14 @@ export default function Home() {
       setError(message);
       setStep('error');
     }
+  }
+
+  function handlePhotoSubmit(uploaded: PreparedPropertyData) {
+    setAddress(uploaded.address);
+    setError(null);
+    setProperty(uploaded);
+    setDebugInfo(null);
+    setStep('editor');
   }
 
   function handleRetry() {
@@ -166,7 +176,29 @@ export default function Home() {
 
         <div className="flex-1 flex flex-col items-center justify-center gap-6">
           {step === 'input' && (
-            <AddressInput onSubmit={handleAddressSubmit} lang={lang} />
+            <div className="w-full max-w-2xl mx-auto flex flex-col gap-5">
+              <div className="flex justify-center">
+                <div className="inline-flex rounded-full border border-white/10 overflow-hidden text-xs font-bold">
+                  <button
+                    onClick={() => setInputMode('address')}
+                    className={`px-4 py-2 transition-colors ${inputMode === 'address' ? 'bg-[#1a6bff]/20 text-[#1a6bff]' : 'text-gray-500 hover:text-white'}`}
+                  >
+                    {tr.upload.tabAddress}
+                  </button>
+                  <button
+                    onClick={() => setInputMode('upload')}
+                    className={`px-4 py-2 transition-colors ${inputMode === 'upload' ? 'bg-[#1a6bff]/20 text-[#1a6bff]' : 'text-gray-500 hover:text-white'}`}
+                  >
+                    {tr.upload.tabUpload}
+                  </button>
+                </div>
+              </div>
+              {inputMode === 'address' ? (
+                <AddressInput onSubmit={handleAddressSubmit} lang={lang} />
+              ) : (
+                <PhotoUpload onSubmit={handlePhotoSubmit} lang={lang} />
+              )}
+            </div>
           )}
 
           {step === 'loading' && (

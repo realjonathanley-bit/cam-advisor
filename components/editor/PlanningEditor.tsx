@@ -356,10 +356,12 @@ export default function PlanningEditor({ property, onReset, debugInfo, lang = 'e
           <h2 className="text-sm font-bold text-white leading-snug">
             {property.formattedAddress ?? property.address}
           </h2>
-          <p className="text-[11px] text-gray-700 mt-0.5 font-mono">
-            {property.coordinates.lat.toFixed(5)},&nbsp;
-            {property.coordinates.lng.toFixed(5)}
-          </p>
+          {property.coordinates && (
+            <p className="text-[11px] text-gray-700 mt-0.5 font-mono">
+              {property.coordinates.lat.toFixed(5)},&nbsp;
+              {property.coordinates.lng.toFixed(5)}
+            </p>
+          )}
         </div>
         <button
           onClick={onReset}
@@ -375,7 +377,7 @@ export default function PlanningEditor({ property, onReset, debugInfo, lang = 'e
         <BgToggleBtn
           active={bgMode === 'satellite'}
           onClick={() => setBgMode('satellite')}
-          label={tr.satellite}
+          label={property.transformProvider === 'upload' ? tr.photo : tr.satellite}
         />
         <BgToggleBtn
           active={bgMode === 'openai'}
